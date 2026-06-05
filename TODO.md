@@ -13,7 +13,7 @@ Decision: in-app MSAL (works local + prod identically). Long-lived session cooki
 - [x] Step 4.0 — Register app in Entra ID (done via az CLI: app "dip-tafelvoetbal-app", single-tenant, redirect http://localhost:8000/auth/callback, secret in local .env)
 - [x] Step 4.1 — Config + secrets plumbing (pydantic-settings, extend .env.example)
 - [x] Step 4.2 — Add SessionMiddleware (signed cookie, long-lived max_age)
-- [ ] Step 4.3 — Login + callback + logout routes (MSAL confidential client)
+- [x] Step 4.3 — Login + callback + logout routes (MSAL confidential client)
 - [ ] Step 4.4 — Auth dependency/guard; protect existing routes
 - [ ] Step 4.5 — Local-dev bypass (AUTH_ENABLED=false injects fake user)
 - [ ] Step 4.6 — Show signed-in user + logout link in UI

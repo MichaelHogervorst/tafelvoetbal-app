@@ -25,5 +25,15 @@ class Settings(BaseSettings):
     # Local development flag (relaxes cookie https_only requirement)
     debug: bool = True
 
+    @property
+    def authority(self) -> str:
+        """Entra ID authority URL for this tenant."""
+        return f"https://login.microsoftonline.com/{self.tenant_id}"
+
+    @property
+    def scopes(self) -> list[str]:
+        """OIDC scopes requested at login (sign-in + basic profile)."""
+        return ["User.Read"]
+
 
 settings = Settings()
