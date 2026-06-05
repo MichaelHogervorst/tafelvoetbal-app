@@ -19,7 +19,7 @@ Decision: in-app MSAL (works local + prod identically). Long-lived session cooki
 - [x] Step 4.6 — Show signed-in user + logout link in UI
 
 ## Phase 3 — Core features (one at a time)
-- [ ] Step 5 — Leaderboard page
+- [x] Step 5 — Leaderboard page
 - [ ] Step 6 — New game → submit score → update stats + Elo
 - [ ] Step 7 — Game history page
 - [ ] Step 8 — Player detail page

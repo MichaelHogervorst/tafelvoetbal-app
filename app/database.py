@@ -60,3 +60,14 @@ def init_db() -> None:
                 insertion_date  TEXT    NOT NULL DEFAULT (DATE('now'))
             );
         """)
+
+
+def get_leaderboard() -> list[sqlite3.Row]:
+    """Return all players sorted by score descending."""
+    with get_db() as conn:
+        return conn.execute("""
+            SELECT name, wins, losses, ROUND(score, 1) AS score, elo
+            FROM players
+            WHERE wins + losses > 0
+            ORDER BY score DESC, wins DESC
+        """).fetchall()
