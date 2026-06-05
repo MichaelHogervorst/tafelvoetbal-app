@@ -1,8 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import RedirectResponse
 from starlette.middleware.sessions import SessionMiddleware
 
 from app.config import settings
 from app.database import init_db
+from app.dependencies import RedirectToLogin
 from app.routers import auth, health, pages
 
 app = FastAPI(title="Tafelvoetbal")
@@ -19,6 +21,12 @@ app.add_middleware(
 app.include_router(pages.router)
 app.include_router(auth.router)
 app.include_router(health.router)
+
+
+@app.exception_handler(RedirectToLogin)
+def redirect_to_login(request: Request, exc: RedirectToLogin) -> RedirectResponse:
+    """Send anonymous users to the login page when a guarded route is hit."""
+    return RedirectResponse(request.url_for("login"))
 
 
 @app.on_event("startup")
