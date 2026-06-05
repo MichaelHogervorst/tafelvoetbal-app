@@ -7,7 +7,13 @@ from app.database import init_db
 from app.dependencies import RedirectToLogin
 from app.routers import auth, health, pages
 
-app = FastAPI(title="Tafelvoetbal")
+app = FastAPI(
+    title="Tafelvoetbal",
+    # Disable API docs in production (when auth is enabled).
+    # Locally (AUTH_ENABLED=false) docs remain available at /docs.
+    docs_url="/docs" if not settings.auth_enabled else None,
+    redoc_url="/redoc" if not settings.auth_enabled else None,
+)
 
 # Signed session cookie. Long-lived (~14 days) so users stay logged in.
 app.add_middleware(
