@@ -20,7 +20,7 @@ Decision: in-app MSAL (works local + prod identically). Long-lived session cooki
 
 ## Phase 3 — Core features (one at a time)
 - [x] Step 5 — Leaderboard page
-- [ ] Step 6 — New game → submit score → update stats + Elo
+- [x] Step 6 — New game → submit score → update stats + Elo
 - [ ] Step 7 — Game history page
 - [ ] Step 8 — Player detail page
 

@@ -39,6 +39,17 @@
         tr:last-child td { border-bottom: none; }
         .rank { color: #888; width: 2rem; }
         .empty { color: #888; font-style: italic; padding: 1.5rem 0; }
+        .header-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; }
+        h1 { margin: 0; font-size: 1.5rem; }
+        .btn {
+            padding: 0.5rem 1.1rem;
+            background: #111;
+            color: #fff;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .btn:hover { background: #333; }
     </style>
 </head>
 
@@ -48,7 +59,10 @@
         <a href="/auth/logout">Sign out</a>
     </div>
 
-    <h1>Leaderboard</h1>
+    <div class="header-row">
+        <h1>Leaderboard</h1>
+        <a class="btn" href="/new-game">+ New game</a>
+    </div>
 
     {% if players %}
     <table>

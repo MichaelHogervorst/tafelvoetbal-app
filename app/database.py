@@ -71,3 +71,78 @@ def get_leaderboard() -> list[sqlite3.Row]:
             WHERE wins + losses > 0
             ORDER BY score DESC, wins DESC
         """).fetchall()
+
+
+def get_player_names() -> list[str]:
+    """Return all known player names for autocomplete."""
+    with get_db() as conn:
+        rows = conn.execute("SELECT name FROM players ORDER BY name").fetchall()
+        return [r["name"] for r in rows]
+
+
+# ---------------------------------------------------------------------------
+# Elo helpers
+# ---------------------------------------------------------------------------
+
+def _get_elo(conn: sqlite3.Connection, name: str) -> int:
+    row = conn.execute("SELECT elo FROM players WHERE name = ?", (name,)).fetchone()
+    return int(row["elo"]) if row else 1200
+
+
+def _calc_elo(current: int, opp_avg: float, won: bool, k: int = 32) -> int:
+    expected = 1 / (1 + 10 ** ((opp_avg - current) / 400))
+    return round(current + k * ((1 if won else 0) - expected))
+
+
+def _upsert_player(conn: sqlite3.Connection, name: str, won: bool, new_elo: int) -> None:
+    row = conn.execute(
+        "SELECT wins, losses FROM players WHERE name = ?", (name,)
+    ).fetchone()
+    if row:
+        wins = row["wins"] + (1 if won else 0)
+        losses = row["losses"] + (0 if won else 1)
+        score = wins / (wins + losses) * 100
+        conn.execute(
+            "UPDATE players SET wins=?, losses=?, score=?, elo=? WHERE name=?",
+            (wins, losses, score, new_elo, name),
+        )
+    else:
+        wins, losses = (1, 0) if won else (0, 1)
+        score = 100.0 if won else 0.0
+        conn.execute(
+            "INSERT INTO players (name, wins, losses, score, elo) VALUES (?,?,?,?,?)",
+            (name, wins, losses, score, new_elo),
+        )
+
+
+# ---------------------------------------------------------------------------
+# Game submission
+# ---------------------------------------------------------------------------
+
+def submit_game(t1p1: str, t1p2: str, t2p1: str, t2p2: str, team1_won: bool) -> None:
+    """Insert game, then update all four players' stats and Elo."""
+    with get_db() as conn:
+        # Current Elos
+        e1a, e1b = _get_elo(conn, t1p1), _get_elo(conn, t1p2)
+        e2a, e2b = _get_elo(conn, t2p1), _get_elo(conn, t2p2)
+        avg1, avg2 = (e1a + e1b) / 2, (e2a + e2b) / 2
+
+        # New Elos
+        new_e1a = _calc_elo(e1a, avg2, team1_won)
+        new_e1b = _calc_elo(e1b, avg2, team1_won)
+        new_e2a = _calc_elo(e2a, avg1, not team1_won)
+        new_e2b = _calc_elo(e2b, avg1, not team1_won)
+
+        # Insert game (1/0 for win/loss)
+        p1, p2 = (1, 0) if team1_won else (0, 1)
+        conn.execute(
+            """INSERT INTO games (t1p1, t1p2, t2p1, t2p2, points_team1, points_team2)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (t1p1, t1p2, t2p1, t2p2, p1, p2),
+        )
+
+        # Upsert all four players
+        _upsert_player(conn, t1p1, team1_won, new_e1a)
+        _upsert_player(conn, t1p2, team1_won, new_e1b)
+        _upsert_player(conn, t2p1, not team1_won, new_e2a)
+        _upsert_player(conn, t2p2, not team1_won, new_e2b)

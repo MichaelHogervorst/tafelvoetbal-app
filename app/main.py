@@ -5,7 +5,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from app.config import settings
 from app.database import init_db
 from app.dependencies import RedirectToLogin
-from app.routers import auth, health, pages
+from app.routers import auth, games, health, pages
 
 app = FastAPI(
     title="Tafelvoetbal",
@@ -25,6 +25,7 @@ app.add_middleware(
 )
 
 app.include_router(pages.router)
+app.include_router(games.router)
 app.include_router(auth.router)
 app.include_router(health.router)
 

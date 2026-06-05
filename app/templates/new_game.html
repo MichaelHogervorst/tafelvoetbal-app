@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New game — Tafelvoetbal</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 36rem;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            line-height: 1.5;
+            color: #111;
+        }
+        .user-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 2rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        h1 { margin: 0 0 1.5rem; font-size: 1.5rem; }
+        .teams {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        fieldset {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 1rem;
+        }
+        legend {
+            font-weight: 600;
+            padding: 0 0.4rem;
+            font-size: 0.9rem;
+        }
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 0.25rem;
+            margin-top: 0.75rem;
+        }
+        label:first-of-type { margin-top: 0; }
+        input[type="text"] {
+            width: 100%;
+            padding: 0.5rem 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #555;
+        }
+        .winner-section {
+            margin-bottom: 1.5rem;
+        }
+        .winner-section h2 {
+            font-size: 1rem;
+            margin: 0 0 0.75rem;
+        }
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.95rem;
+            color: #111;
+            cursor: pointer;
+            margin: 0;
+        }
+        .actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        button[type="submit"] {
+            padding: 0.6rem 1.4rem;
+            background: #111;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover { background: #333; }
+        a.cancel { font-size: 0.9rem; color: #555; }
+    </style>
+</head>
+
+<body>
+    <div class="user-bar">
+        <span>Signed in as <strong>{{ user.name }}</strong></span>
+        <a href="/auth/logout">Sign out</a>
+    </div>
+
+    <h1>New game</h1>
+
+    <form method="post" action="/submit-score">
+        <div class="teams">
+            <fieldset>
+                <legend>Team 1</legend>
+                <label for="t1p1">Player 1</label>
+                <input id="t1p1" name="t1p1" type="text" list="player-list" autocomplete="off" required>
+                <label for="t1p2">Player 2</label>
+                <input id="t1p2" name="t1p2" type="text" list="player-list" autocomplete="off" required>
+            </fieldset>
+            <fieldset>
+                <legend>Team 2</legend>
+                <label for="t2p1">Player 1</label>
+                <input id="t2p1" name="t2p1" type="text" list="player-list" autocomplete="off" required>
+                <label for="t2p2">Player 2</label>
+                <input id="t2p2" name="t2p2" type="text" list="player-list" autocomplete="off" required>
+            </fieldset>
+        </div>
+
+        <datalist id="player-list">
+            {% for name in players %}
+            <option value="{{ name }}">
+            {% endfor %}
+        </datalist>
+
+        <div class="winner-section">
+            <h2>Who won?</h2>
+            <div class="radio-group">
+                <label><input type="radio" name="winner" value="team1" required> Team 1</label>
+                <label><input type="radio" name="winner" value="team2"> Team 2</label>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="submit">Submit</button>
+            <a class="cancel" href="/">Cancel</a>
+        </div>
+    </form>
+</body>
+
+</html>
