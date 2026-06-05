@@ -16,7 +16,7 @@ Decision: in-app MSAL (works local + prod identically). Long-lived session cooki
 - [x] Step 4.3 — Login + callback + logout routes (MSAL confidential client)
 - [x] Step 4.4 — Auth dependency/guard; protect existing routes
 - [x] Step 4.5 — Local-dev bypass (AUTH_ENABLED=false injects fake user) [folded into 4.4]
-- [ ] Step 4.6 — Show signed-in user + logout link in UI
+- [x] Step 4.6 — Show signed-in user + logout link in UI
 
 ## Phase 3 — Core features (one at a time)
 - [ ] Step 5 — Leaderboard page
