@@ -5,7 +5,7 @@
 - [x] Step 1 — Minimal FastAPI app with one health route
 - [x] Step 1.5 — Simple homepage at `/`
 - [x] Step 2 — SQLite setup: connection + schema (games, players)
-- [ ] Step 3 — Local dev conveniences: .env.example, run.sh, concise README
+- [x] Step 3 — Local dev conveniences: .env.example, run.sh, concise README
 
 ## Phase 2 — Auth (Entra ID, server-side Authorization Code Flow + session cookie)
 Decision: in-app MSAL (works local + prod identically). Long-lived session cookie
