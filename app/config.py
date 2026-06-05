@@ -22,5 +22,8 @@ class Settings(BaseSettings):
     # Set to false to skip auth during local development
     auth_enabled: bool = False
 
+    # Local development flag (relaxes cookie https_only requirement)
+    debug: bool = True
+
 
 settings = Settings()

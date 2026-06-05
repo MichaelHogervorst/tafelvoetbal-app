@@ -8,9 +8,11 @@
 - [ ] Step 3 — Local dev conveniences: .env.example, run.sh, concise README
 
 ## Phase 2 — Auth (Entra ID, server-side Authorization Code Flow + session cookie)
+Decision: in-app MSAL (works local + prod identically). Long-lived session cookie
+(~14 days), http_only, same_site=lax, https_only in prod only.
 - [x] Step 4.0 — Register app in Entra ID (done via az CLI: app "dip-tafelvoetbal-app", single-tenant, redirect http://localhost:8000/auth/callback, secret in local .env)
 - [x] Step 4.1 — Config + secrets plumbing (pydantic-settings, extend .env.example)
-- [ ] Step 4.2 — Add SessionMiddleware (signed cookie)
+- [x] Step 4.2 — Add SessionMiddleware (signed cookie, long-lived max_age)
 - [ ] Step 4.3 — Login + callback + logout routes (MSAL confidential client)
 - [ ] Step 4.4 — Auth dependency/guard; protect existing routes
 - [ ] Step 4.5 — Local-dev bypass (AUTH_ENABLED=false injects fake user)
