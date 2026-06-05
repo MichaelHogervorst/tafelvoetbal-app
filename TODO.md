@@ -9,7 +9,7 @@
 
 ## Phase 2 — Auth (Entra ID, server-side Authorization Code Flow + session cookie)
 - [x] Step 4.0 — Register app in Entra ID (done via az CLI: app "dip-tafelvoetbal-app", single-tenant, redirect http://localhost:8000/auth/callback, secret in local .env)
-- [ ] Step 4.1 — Config + secrets plumbing (pydantic-settings, extend .env.example)
+- [x] Step 4.1 — Config + secrets plumbing (pydantic-settings, extend .env.example)
 - [ ] Step 4.2 — Add SessionMiddleware (signed cookie)
 - [ ] Step 4.3 — Login + callback + logout routes (MSAL confidential client)
 - [ ] Step 4.4 — Auth dependency/guard; protect existing routes
