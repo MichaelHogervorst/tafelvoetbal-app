@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from starlette.middleware.sessions import SessionMiddleware
 
 from app.config import settings
-from app.database import init_db
+from app.database import init_db, migrate_db
 from app.dependencies import RedirectToLogin
 from app.routers import auth, games, health, pages
 
@@ -39,3 +39,4 @@ def redirect_to_login(request: Request, exc: RedirectToLogin) -> RedirectRespons
 @app.on_event("startup")
 def on_startup() -> None:
     init_db()
+    migrate_db()

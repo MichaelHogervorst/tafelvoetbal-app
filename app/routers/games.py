@@ -22,10 +22,11 @@ def submit_score(
     request: Request,
     user: dict = Depends(get_current_user),
     t1p1: str = Form(...),
-    t1p2: str = Form(...),
+    t1p2: str = Form(""),
     t2p1: str = Form(...),
-    t2p2: str = Form(...),
-    winner: str = Form(...),  # "team1" or "team2"
+    t2p2: str = Form(""),
+    t1_score: int = Form(...),
+    t2_score: int = Form(...),
 ) -> RedirectResponse:
-    submit_game(t1p1, t1p2, t2p1, t2p2, team1_won=(winner == "team1"))
+    submit_game(t1p1, t1p2.strip(), t2p1, t2p2.strip(), t1_score=t1_score, t2_score=t2_score)
     return RedirectResponse(request.url_for("home"), status_code=303)

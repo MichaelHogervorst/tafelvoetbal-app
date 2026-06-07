@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tafelvoetbal</title>
+    <title>Game history — Tafelvoetbal</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,7 +12,7 @@
 
         body {
             font-family: system-ui, sans-serif;
-            max-width: 48rem;
+            max-width: 56rem;
             margin: 2rem auto;
             padding: 0 1rem;
             line-height: 1.5;
@@ -28,46 +28,6 @@
             margin-bottom: 2rem;
             padding-bottom: 0.75rem;
             border-bottom: 1px solid #e5e5e5;
-        }
-
-        h1 {
-            margin: 0 0 1.5rem;
-            font-size: 1.5rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-
-        th {
-            text-align: left;
-            padding: 0.5rem 0.75rem;
-            border-bottom: 2px solid #111;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        td {
-            padding: 0.6rem 0.75rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        .rank {
-            color: #888;
-            width: 2rem;
-        }
-
-        .empty {
-            color: #888;
-            font-style: italic;
-            padding: 1.5rem 0;
         }
 
         .header-row {
@@ -94,6 +54,63 @@
         .btn:hover {
             background: #333;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 2px solid #111;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .score {
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .winner {
+            font-weight: 600;
+        }
+
+        .date {
+            color: #888;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .empty {
+            color: #888;
+            font-style: italic;
+            padding: 1.5rem 0;
+        }
+
+        .team {
+            line-height: 1.3;
+        }
+
+        .team span {
+            display: block;
+        }
     </style>
 </head>
 
@@ -104,36 +121,37 @@
     </div>
 
     <div class="header-row">
-        <h1>Leaderboard</h1>
+        <h1>Game history</h1>
         <div style="display:flex;gap:0.6rem;">
-            <a class="btn" href="/games">Game history</a>
+            <a class="btn" href="/">Leaderboard</a>
             <a class="btn" href="/new-game">+ New game</a>
         </div>
     </div>
 
-    {% if players %}
+    {% if games %}
     <table>
         <thead>
             <tr>
-                <th class="rank">#</th>
-                <th>Player</th>
-                <th>W</th>
-                <th>L</th>
-                <th>Win %</th>
-                <th>Elo</th>
-                <th>TrueSkill</th>
+                <th>Date</th>
+                <th>Team 1</th>
+                <th style="text-align:center;">Score</th>
+                <th>Team 2</th>
             </tr>
         </thead>
         <tbody>
-            {% for player in players %}
+            {% for game in games %}
+            {% set t1_won = game.points_team1 > game.points_team2 %}
             <tr>
-                <td class="rank">{{ loop.index }}</td>
-                <td><a href="/player/{{ player.name | urlencode }}" style="color:inherit;">{{ player.name }}</a></td>
-                <td>{{ player.wins }}</td>
-                <td>{{ player.losses }}</td>
-                <td>{{ player.score }}%</td>
-                <td>{{ player.elo }}</td>
-                <td>{{ player.ts_rating }}</td>
+                <td class="date">{{ game.insertion_date }}</td>
+                <td class="team {% if t1_won %}winner{% endif %}">
+                    <span>{{ game.t1p1 }}</span>
+                    <span>{{ game.t1p2 }}</span>
+                </td>
+                <td class="score">{{ game.points_team1 }} – {{ game.points_team2 }}</td>
+                <td class="team {% if not t1_won %}winner{% endif %}">
+                    <span>{{ game.t2p1 }}</span>
+                    <span>{{ game.t2p2 }}</span>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

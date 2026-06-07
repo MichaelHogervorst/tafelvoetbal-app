@@ -21,10 +21,12 @@ Decision: in-app MSAL (works local + prod identically). Long-lived session cooki
 ## Phase 3 — Core features (one at a time)
 - [x] Step 5 — Leaderboard page
 - [x] Step 6 — New game → submit score → update stats + Elo
-- [ ] Step 7 — Game history page
-- [ ] Step 8 — Player detail page
+- [x] Step 6.1 — Track real points per team (score inputs on new game form; store actual scores instead of 1/0)
+- [x] Step 7 — Game history page (`/games`; table with date, teams, score, winner highlighted)
+- [x] Step 8 — Player detail page (`/player/{name}`; stats cards + personal game history with W/L)
+- [x] Step 9 — Dual rating system: TrueSkill alongside Elo; support 1v1, 2v1 and 2v2 game formats
 
 ## Phase 4 — Infra
-- [ ] Step 8.5 — Docker (Dockerfile, .dockerignore) — deferred to here
-- [ ] Step 9 — Terraform: Container App, ACR, Storage (Azure Files mount for SQLite)
+- [ ] Step 10 — Docker (Dockerfile, .dockerignore); consider upgrading to Python 3.13 at this point
+- [ ] Step 11 — Terraform: Container App, ACR, Storage (Azure Files mount for SQLite)
 
