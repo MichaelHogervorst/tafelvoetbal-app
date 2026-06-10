@@ -32,6 +32,26 @@ uv run uvicorn app.main:app --reload
 
 App starts at `http://localhost:8000`.
 
+## Run with Docker
+
+Requires only Docker — no local Python or uv needed.
+
+```bash
+# 1. Configure environment
+cp .env.example .env   # edit values as needed
+
+# 2. Build and start
+docker compose up --build
+```
+
+App starts at `http://localhost:8000`. The SQLite database is stored in a
+bind-mounted `./data` folder, so it survives container restarts.
+
+The image itself is storage-agnostic: `/app/data` is just a mount point. Locally
+it's bound to `./data`; in production it's backed by durable storage (see
+[TODO.md](TODO.md), step 11). Configuration is supplied entirely via environment
+variables at runtime — no `.env` file is baked into the image.
+
 ## Auth
 
 Authentication uses Entra ID (Azure AD) via MSAL (Authorization Code Flow).
@@ -68,6 +88,9 @@ app/
   static/             # CSS / JS / images
 data/                 # SQLite DB file (git-ignored, auto-created on startup)
 .env.example          # Environment variable template — copy to .env
+Dockerfile            # Multi-stage build (uv builder + slim runtime)
+docker-compose.yml    # Local dev: build, run, bind-mount ./data
+.dockerignore         # Excludes .env, data/, .venv, etc. from the image
 ```
 
   routers/         # Route handlers (grouped by topic)
