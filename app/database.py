@@ -11,10 +11,12 @@ from typing import Iterator
 
 import trueskill as _ts_lib
 
+from app.config import settings
+
 # TrueSkill environment — no draws in foosball.
 _TS = _ts_lib.TrueSkill(draw_probability=0.0)
 
-DB_PATH = Path("data/tafelvoetbal.db")
+DB_PATH = Path(settings.db_path)
 
 
 def get_connection() -> sqlite3.Connection:

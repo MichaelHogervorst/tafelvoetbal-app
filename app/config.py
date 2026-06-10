@@ -1,5 +1,12 @@
-"""App-wide configuration loaded from .env."""
+"""App-wide configuration.
 
+Values are loaded from environment variables first; a .env file is used as a
+fallback for local development. In production no .env file is present — all
+configuration must be supplied as environment variables by the host (Azure
+Container Apps / Terraform).
+"""
+
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -24,6 +31,18 @@ class Settings(BaseSettings):
 
     # Local development flag (relaxes cookie https_only requirement)
     debug: bool = True
+
+    # SQLite database path — override to point at a mounted volume in production
+    db_path: str = "data/tafelvoetbal.db"
+
+    @model_validator(mode="after")
+    def _check_secrets(self) -> "Settings":
+        """Reject insecure defaults when running in production mode."""
+        if not self.debug and self.session_secret == "change-me":
+            raise ValueError(
+                "SESSION_SECRET must be set to a secure value when DEBUG=false."
+            )
+        return self
 
     @property
     def authority(self) -> str:

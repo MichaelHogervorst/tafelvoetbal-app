@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      # Bind mount the local ./data folder to the container's mount point.
+      # The SQLite database persists here across container restarts.
+      - ./data:/app/data
+    env_file:
+      - .env
